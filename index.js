@@ -1,5 +1,3 @@
-// @ts-check
-
 import { updateCategory } from './add-block.mjs'
 
 updateCategory('block_template', ['aqu3180_alert', 'aqu3180_console_log'], addBlock => {
