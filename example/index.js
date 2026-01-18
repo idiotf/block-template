@@ -1,4 +1,8 @@
-import { updateCategory } from 'https://raw.githack.com/idiotf/block-template/esm/dist/index.js'
+// @ts-check
+
+/// <reference path='../dist/index.d.ts' />
+// @ts-ignore
+await import('https://raw.githack.com/idiotf/block-template/esm/dist/index.mjs');
 
 const c2 = '#00a8f3';
 const o2 = '#1f8bfd';

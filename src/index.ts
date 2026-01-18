@@ -1,9 +1,13 @@
 // @ts-check
 
-/// <reference path='./types/index.d.ts' />
+import './types/index.d.ts'
 
 import type { EntityObject } from './types/class/entity'
 import type { Field, Scope, Skeleton } from './types/entry'
+
+declare global {
+  var updateCategory: typeof import('.').default
+}
 
 /**
  * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
@@ -18,10 +22,10 @@ import type { Field, Scope, Skeleton } from './types/entry'
  * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
  * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
  */
-export function updateCategory<const Blocks extends string[]>(
+export default function updateCategory<const Blocks extends string[]>(
   category: string,
   blocks: Blocks,
-  callback: (addBlock: ReturnType<typeof getAddBlock<Blocks[number]>>) => void,
+  callback: (addBlock: AddBlock<Blocks[number]>) => void,
   options: {
     name?: string
     background?: string
@@ -97,8 +101,7 @@ export function updateCategory<const Blocks extends string[]>(
 }
 
 type LiteralUnion<BlockName extends string> = BlockName | (string & Record<never, never>)
-
-const getAddBlock = <BlockName extends string>(categoryName: string) =>
+type AddBlock<BlockName extends string> =
   /**
    * Entry.block에 새로운 블록을 등록합니다.
    * @param blockName 블록의 내부 이름입니다.
@@ -114,6 +117,24 @@ const getAddBlock = <BlockName extends string>(categoryName: string) =>
    * @param func 블록이 실행될 때 호출되는 함수입니다.
    * @param skeleton 블록의 모양입니다.
    */
+  <ParamsKey extends string>(
+    blockName: LiteralUnion<BlockName>,
+    template: string,
+    colors: {
+      color: string
+      outerline: string
+    },
+    param: {
+      params: (Field & Record<string, unknown>)[]
+      def: object[]
+      map: Record<ParamsKey, number>
+    },
+    _class: string,
+    func: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown,
+    skeleton: Skeleton,
+  ) => void
+
+const getAddBlock = <BlockName extends string>(categoryName: string): AddBlock<BlockName> =>
   function addBlock<ParamsKey extends string>(
     blockName: LiteralUnion<BlockName>,
     template: string,

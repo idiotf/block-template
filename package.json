@@ -2,12 +2,13 @@
   "name": "block-template",
   "devDependencies": {
     "@types/bun": "latest",
+    "dts-bundle-generator": "^9.5.1",
     "tsdown": "^0.20.0-beta.3"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "scripts": {
-    "build": "tsdown src/index.ts --dts --minify"
+    "build": "tsdown && dts-bundle-generator src/index.ts -o dist/index.d.ts --inline-declare-global --export-referenced-types false --no-banner"
   }
 }
