@@ -1,0 +1,14 @@
+{
+  "name": "block-template",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "tsdown": "^0.20.0-beta.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --dts --minify"
+  }
+}

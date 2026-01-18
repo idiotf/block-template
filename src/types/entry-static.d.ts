@@ -4,9 +4,16 @@ export const colorSet: {
   block: Record<keyof ColorSet, Record<string, string>>
 
   common: {
-    TRANSPARENT: string
-    TEXT: string
+    ALERT: string
+    BUTTON: string
+    BUTTON_BACKGROUND: string
+    BUTTON_BACKGROUND_DISABLED: string
+    BUTTON_DISABLED: string
+    DARK: string
     GRAY: string
+    TEXT: string
+    TRANSPARENT: string
+    WHITE: string
   }
 }
 
