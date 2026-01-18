@@ -1,27 +1,27 @@
-(function(e,t){typeof exports==`object`&&typeof module<`u`?module.exports=t():typeof define==`function`&&define.amd?define([],t):(e=typeof globalThis<`u`?globalThis:e||self,e.updateCategory=t())})(this,function(){function e(n,r,i,a){if(!window.Entry||!Entry.block){new MutationObserver((t,o)=>{window.Entry&&Entry.block&&(e(n,r,i,a),o.disconnect())}).observe(document,{subtree:!0,childList:!0});return}if(EntryStatic.getAllBlocks().some(e=>n==e.category)||(a?.name&&(Lang.Blocks[n.toUpperCase()]=a.name),EntryStatic.getAllBlocks=(e=>()=>[...e(),{category:n,blocks:r}])(EntryStatic.getAllBlocks),Entry.playground?.blockMenu?._categoryData.push({category:n,blocks:[]}),Entry.playground?.blockMenu?._generateCategoryView(Entry.playground.blockMenu._categoryData),Entry.playground?.blockMenu?._generateCategoryCode(n),i(t(n)),Entry.playground?.blockMenu?.setMenu(),!a))return;let o=document.head.appendChild(document.createElement(`style`));o.textContent=`
-    #entryCategory${n} {
+self.Entry?.block||await new Promise(e=>{new MutationObserver((t,n)=>{self.Entry?.block&&(e(),n.disconnect())}).observe(document,{subtree:!0,childList:!0})}),self.updateCategory=e;function e(e,n,r,i){if(EntryStatic.getAllBlocks().some(t=>e==t.category)||(i?.name&&(Lang.Blocks[e.toUpperCase()]=i.name),EntryStatic.getAllBlocks=(t=>()=>[...t(),{category:e,blocks:n}])(EntryStatic.getAllBlocks),Entry.playground?.blockMenu?._categoryData.push({category:e,blocks:[]}),Entry.playground?.blockMenu?._generateCategoryView(Entry.playground.blockMenu._categoryData),Entry.playground?.blockMenu?._generateCategoryCode(e),r(t(e)),Entry.playground?.blockMenu?.setMenu(),!i))return;let a=document.head.appendChild(document.createElement(`style`));a.textContent=`
+    #entryCategory${e} {
       background-repeat: no-repeat;
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
       margin-bottom: 1px;
-      ${a.background?`
-        background-image: url(${a.background});
+      ${i.background?`
+        background-image: url(${i.background});
       `:``}
-      ${a.backgroundSize?`
-        background-size: ${a.backgroundSize}px;
+      ${i.backgroundSize?`
+        background-size: ${i.backgroundSize}px;
       `:``}
     }
 
-    .entrySelectedCategory#entryCategory${n} {
-      ${a.backgroundOn?`
-        background-image: url(${a.backgroundOn});
+    .entrySelectedCategory#entryCategory${e} {
+      ${i.backgroundOn?`
+        background-image: url(${i.backgroundOn});
       `:``}
-      ${a.colorOn?`
-        background-color: ${a.colorOn};
-        border-color: ${a.colorOn};
+      ${i.colorOn?`
+        background-color: ${i.colorOn};
+        border-color: ${i.colorOn};
       `:``}
-      ${a.colorOnText?`
-        color: ${a.colorOnText};
+      ${i.colorOnText?`
+        color: ${i.colorOnText};
       `:``}
     }
-  `}let t=e=>function(t,n,r,i,a,o,s=`basic`){let{color:c,outerline:l}=r,{params:u,def:d,map:f}=i;Entry.moduleManager?.loadBlocks({categoryName:e,blockSchemas:[{blockName:t,isBlockShowBlockMenu:!0,block:{color:c,outerLine:l,skeleton:s,statement:[],params:u,events:{},def:{params:d,type:t},paramsKeyMap:f,class:a||`default`,func:o,template:n}}]})};return e});
+  `}const t=e=>function(t,n,r,i,a,o,s=`basic`){let{color:c,outerline:l}=r,{params:u,def:d,map:f}=i;Entry.moduleManager?.loadBlocks({categoryName:e,blockSchemas:[{blockName:t,isBlockShowBlockMenu:!0,block:{color:c,outerLine:l,skeleton:s,statement:[],params:u,events:{},def:{params:d,type:t},paramsKeyMap:f,class:a||`default`,func:o,template:n}}]})};export{};

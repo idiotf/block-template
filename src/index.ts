@@ -1,13 +1,21 @@
-// @ts-check
-
 import './types/index.d.ts'
-
 import type { EntityObject } from './types/class/entity'
 import type { Field, Scope, Skeleton } from './types/entry'
 
 declare global {
-  var updateCategory: typeof import('.').default
+  var updateCategory: typeof updateCategory$
 }
+
+if (!self.Entry?.block) await new Promise<void>(resolve => {
+  new MutationObserver((_, observer) => {
+    if (self.Entry?.block) {
+      resolve()
+      observer.disconnect()
+    }
+  }).observe(document, { subtree: true, childList: true })
+})
+
+self.updateCategory = updateCategory$
 
 /**
  * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
@@ -22,7 +30,7 @@ declare global {
  * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
  * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
  */
-export default function updateCategory<const Blocks extends string[]>(
+function updateCategory$<const Blocks extends string[]>(
   category: string,
   blocks: Blocks,
   callback: (addBlock: AddBlock<Blocks[number]>) => void,
@@ -35,17 +43,6 @@ export default function updateCategory<const Blocks extends string[]>(
     colorOnText?: string
   },
 ) {
-  if (!window.Entry || !Entry.block) {
-    new MutationObserver((_, observer) => {
-      if (window.Entry && Entry.block) {
-        updateCategory(category, blocks, callback, options)
-        observer.disconnect()
-      }
-    }).observe(document, { subtree: true, childList: true })
-
-    return
-  }
-
   if (EntryStatic.getAllBlocks().some(block => category == block.category)) return
   if (options?.name) Lang.Blocks[category.toUpperCase()] = options.name
 
