@@ -22,7 +22,7 @@ interface CategoryData {
   blocks: string[]
 }
 
-interface ColorSet {
+export interface ColorSet {
   default: string
   darken: string
   lighten: string
