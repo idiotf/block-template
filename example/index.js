@@ -2,7 +2,7 @@
 
 /// <reference path='../dist/index.d.ts' />
 // @ts-ignore
-await import('https://raw.githack.com/idiotf/block-template/v0.1.0/dist/index.js');
+await import('https://raw.githack.com/idiotf/block-template/v0.1.1/dist/index.js');
 
 const c2 = '#00a8f3';
 const o2 = '#1f8bfd';

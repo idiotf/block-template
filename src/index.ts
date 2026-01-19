@@ -68,7 +68,7 @@ function updateCategory$<const Blocks extends string[]>(
   if (!options) return
 
   const sheet = new CSSStyleSheet
-  sheet.replaceSync(`#entryCategory${category}{background-repeat:no-repeat;margin-bottom:1px;${options.background ? `background-image:url(${options.background});` : ''}${options.backgroundSize ? `background-size:${options.backgroundSize}px` : ''}}.entrySelectedCategory#entryCategory${category}{${options.backgroundOn ? `background-image:url(${options.backgroundOn});` : ''}${options.colorOn ? `background-color:${options.colorOn};border-color:${options.colorOn};` : ''}${options.colorOnText ? `color:${options.colorOnText}` : ''}}`)
+  sheet.replaceSync(`#entryCategory${category}{background-repeat:no-repeat;${options.background ? `background-image:url(${options.background});` : ''}${options.backgroundSize ? `background-size:${options.backgroundSize}px` : ''}}.entrySelectedCategory#entryCategory${category}{${options.backgroundOn ? `background-image:url(${options.backgroundOn});` : ''}${options.colorOn ? `background-color:${options.colorOn};border-color:${options.colorOn};` : ''}${options.colorOnText ? `color:${options.colorOnText}` : ''}}`)
   document.adoptedStyleSheets.push(sheet)
 }
 
