@@ -53,6 +53,14 @@ interface FieldBase {
   type: string
 }
 
+export interface FieldText extends FieldBase {
+  type: 'Text'
+  text: string
+  color?: string
+  align?: 'left' | 'center'
+  fontSize?: number
+}
+
 export interface FieldBlock extends FieldBase {
   type: 'Block'
   accept: string
@@ -64,6 +72,7 @@ export interface FieldDropdownDynamic extends FieldBase {
 }
 
 export type Field =
+  | FieldText
   | FieldBase
   | FieldBlock
   | FieldDropdownDynamic

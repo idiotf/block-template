@@ -3,6 +3,19 @@ import type { EntityObject } from './types/class/entity'
 import type { Field, Scope, Skeleton } from './types/entry'
 
 declare global {
+  /**
+   * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
+   * @param category 새로 추가할 카테고리 내부 이름입니다.
+   * @param blocks 새로 추가할 카테고리 블록 배열입니다.
+   * @param callback 카테고리에 추가할 블록을 addBlock으로 추가하는 콜백입니다.
+   * @param options 카테고리에 추가할 이름, 아이콘 등의 추가 설정입니다.
+   * @param options.name 카테고리의 표시 이름입니다.
+   * @param options.background 카테고리의 아이콘 url입니다.
+   * @param options.backgroundOn 카테고리가 선택되었을 때의 아이콘 url입니다.
+   * @param options.backgroundSize 카테고리의 아이콘 크기(px)입니다.
+   * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
+   * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
+   */
   var updateCategory: typeof updateCategory$
 }
 
@@ -17,19 +30,6 @@ if (!self.Entry?.block) await new Promise<void>(resolve => {
 
 self.updateCategory = updateCategory$
 
-/**
- * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
- * @param category 새로 추가할 카테고리 내부 이름입니다.
- * @param blocks 새로 추가할 카테고리 블록 배열입니다.
- * @param callback 카테고리에 추가할 블록을 addBlock으로 추가하는 콜백입니다.
- * @param options 카테고리에 추가할 이름, 아이콘 등의 추가 설정입니다.
- * @param options.name 카테고리의 표시 이름입니다.
- * @param options.background 카테고리의 아이콘 url입니다.
- * @param options.backgroundOn 카테고리가 선택되었을 때의 아이콘 url입니다.
- * @param options.backgroundSize 카테고리의 아이콘 크기(px)입니다.
- * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
- * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
- */
 function updateCategory$<const Blocks extends string[]>(
   category: string,
   blocks: Blocks,
@@ -67,34 +67,9 @@ function updateCategory$<const Blocks extends string[]>(
 
   if (!options) return
 
-  const style = document.head.appendChild(document.createElement('style'))
-  style.textContent = `
-    #entryCategory${category} {
-      background-repeat: no-repeat;
-      border-bottom-right-radius: 6px;
-      border-bottom-left-radius: 6px;
-      margin-bottom: 1px;
-      ${options.background ? `
-        background-image: url(${options.background});
-      ` : ''}
-      ${options.backgroundSize ? `
-        background-size: ${options.backgroundSize}px;
-      ` : ''}
-    }
-
-    .entrySelectedCategory#entryCategory${category} {
-      ${options.backgroundOn ? `
-        background-image: url(${options.backgroundOn});
-      ` : ''}
-      ${options.colorOn ? `
-        background-color: ${options.colorOn};
-        border-color: ${options.colorOn};
-      ` : ''}
-      ${options.colorOnText ? `
-        color: ${options.colorOnText};
-      ` : ''}
-    }
-  `
+  const sheet = new CSSStyleSheet
+  sheet.replaceSync(`#entryCategory${category}{background-repeat:no-repeat;margin-bottom:1px;${options.background ? `background-image:url(${options.background});` : ''}${options.backgroundSize ? `background-size:${options.backgroundSize}px` : ''}}.entrySelectedCategory#entryCategory${category}{${options.backgroundOn ? `background-image:url(${options.backgroundOn});` : ''}${options.colorOn ? `background-color:${options.colorOn};border-color:${options.colorOn};` : ''}${options.colorOnText ? `color:${options.colorOnText}` : ''}}`)
+  document.adoptedStyleSheets.push(sheet)
 }
 
 type LiteralUnion<BlockName extends string> = BlockName | (string & Record<never, never>)
@@ -119,33 +94,33 @@ type AddBlock<BlockName extends string> =
     template: string,
     colors: {
       color: string
-      outerline: string
+      outerline?: string
     },
     param: {
-      params: (Field & Record<string, unknown>)[]
-      def: object[]
-      map: Record<ParamsKey, number>
+      params?: (Field & Record<string, unknown>)[]
+      def?: object[]
+      map?: Record<ParamsKey, number>
     },
-    _class: string,
-    func: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown,
-    skeleton: Skeleton,
+    _class?: string,
+    func?: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown,
+    skeleton?: Skeleton,
   ) => void
 
-const getAddBlock = <BlockName extends string>(categoryName: string): AddBlock<BlockName> =>
+const getAddBlock = <BlockName extends string>(categoryName: string) =>
   function addBlock<ParamsKey extends string>(
     blockName: LiteralUnion<BlockName>,
     template: string,
     colors: {
       color: string
-      outerline: string
+      outerline?: string
     },
     param: {
-      params: (Field & Record<string, unknown>)[]
-      def: object[]
-      map: Record<ParamsKey, number>
+      params?: (Field & Record<string, unknown>)[]
+      def?: object[]
+      map?: Record<ParamsKey, number>
     },
-    _class: string,
-    func: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown,
+    _class?: string,
+    func?: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown,
     skeleton: Skeleton = 'basic',
   ) {
     const { color, outerline } = colors

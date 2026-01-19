@@ -316,6 +316,13 @@ type Skeleton = "basic" | "basic_without_next" | "basic_boolean_field" | "basic_
 interface FieldBase {
 	type: string;
 }
+interface FieldText extends FieldBase {
+	type: "Text";
+	text: string;
+	color?: string;
+	align?: "left" | "center";
+	fontSize?: number;
+}
 interface FieldBlock extends FieldBase {
 	type: "Block";
 	accept: string;
@@ -324,7 +331,7 @@ interface FieldDropdownDynamic extends FieldBase {
 	type: "DropdownDynamic";
 	menuName: string;
 }
-type Field = FieldBase | FieldBlock | FieldDropdownDynamic;
+type Field = FieldText | FieldBase | FieldBlock | FieldDropdownDynamic;
 interface EntryBlock {
 	color: string;
 	outerLine?: string;
@@ -386,6 +393,19 @@ declare global {
 	} | null;
 }
 declare global {
+	/**
+	 * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
+	 * @param category 새로 추가할 카테고리 내부 이름입니다.
+	 * @param blocks 새로 추가할 카테고리 블록 배열입니다.
+	 * @param callback 카테고리에 추가할 블록을 addBlock으로 추가하는 콜백입니다.
+	 * @param options 카테고리에 추가할 이름, 아이콘 등의 추가 설정입니다.
+	 * @param options.name 카테고리의 표시 이름입니다.
+	 * @param options.background 카테고리의 아이콘 url입니다.
+	 * @param options.backgroundOn 카테고리가 선택되었을 때의 아이콘 url입니다.
+	 * @param options.backgroundSize 카테고리의 아이콘 크기(px)입니다.
+	 * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
+	 * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
+	 */
 	var updateCategory: typeof updateCategory$;
 }
 declare function updateCategory$<const Blocks extends string[]>(category: string, blocks: Blocks, callback: (addBlock: AddBlock<Blocks[number]>) => void, options: {
@@ -415,18 +435,18 @@ type AddBlock<BlockName extends string> =
  */
 <ParamsKey extends string>(blockName: LiteralUnion<BlockName>, template: string, colors: {
 	color: string;
-	outerline: string;
+	outerline?: string;
 }, param: {
-	params: (Field & Record<string, unknown>)[];
-	def: object[];
-	map: Record<ParamsKey, number>;
-}, _class: string, func: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown, skeleton: Skeleton) => void;
+	params?: (Field & Record<string, unknown>)[];
+	def?: object[];
+	map?: Record<ParamsKey, number>;
+}, _class?: string, func?: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown, skeleton?: Skeleton) => void;
 
 declare namespace EntryStatic$ {
 	export { CategoryData$1 as CategoryData, ColorSet, colorSet, getAllBlocks };
 }
 declare namespace Entry$ {
-	export { EntryBlock, EntryBlockModule, Field, FieldBlock, FieldDropdownDynamic, STATIC, Scope, Skeleton, block, engine, moduleManager, options, playground, projectId, scene, userAgent, variableContainer };
+	export { EntryBlock, EntryBlockModule, Field, FieldBlock, FieldDropdownDynamic, FieldText, STATIC, Scope, Skeleton, block, engine, moduleManager, options, playground, projectId, scene, userAgent, variableContainer };
 }
 declare namespace Lang$ {
 	export { Blocks, Workspace, fallbackType, type };
