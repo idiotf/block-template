@@ -2,7 +2,7 @@ import './types/index.d.ts'
 import type { EntityObject } from './types/class/entity'
 import type { Field, Scope, Skeleton } from './types/entry'
 
-declare global {
+type UpdateCategory =
   /**
    * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
    * @param category 새로 추가할 카테고리 내부 이름입니다.
@@ -16,7 +16,22 @@ declare global {
    * @param options.colorOn 카테고리가 선택되었을 때의 표시 색깔입니다.
    * @param options.colorOnText 카테고리가 선택되었을 때의 텍스트 색깔입니다.
    */
-  var updateCategory: typeof updateCategory$
+  <const Blocks extends string[]>(
+    category: string,
+    blocks: Blocks,
+    callback: (addBlock: AddBlock<Blocks[number]>) => void,
+    options: {
+      name?: string
+      background?: string
+      backgroundOn?: string
+      backgroundSize?: string
+      colorOn?: string
+      colorOnText?: string
+    },
+  ) => void
+
+declare global {
+  var updateCategory: UpdateCategory
 }
 
 if (!self.Entry?.block) await new Promise<void>(resolve => {
@@ -28,9 +43,9 @@ if (!self.Entry?.block) await new Promise<void>(resolve => {
   }).observe(document, { subtree: true, childList: true })
 })
 
-self.updateCategory = updateCategory$
+self.updateCategory = updateCategory
 
-function updateCategory$<const Blocks extends string[]>(
+function updateCategory<const Blocks extends string[]>(
   category: string,
   blocks: Blocks,
   callback: (addBlock: AddBlock<Blocks[number]>) => void,
