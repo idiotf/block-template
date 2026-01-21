@@ -330,6 +330,10 @@ interface FieldBlock extends FieldBase {
 interface FieldDropdownDynamic extends FieldBase {
 	type: "DropdownDynamic";
 	menuName: string;
+	value?: unknown;
+	fontSize?: number;
+	bgColor?: string;
+	arrowColor?: string;
 }
 type Field = FieldText | FieldBase | FieldBlock | FieldDropdownDynamic;
 interface EntryBlock {
@@ -392,6 +396,51 @@ declare global {
 		username: string;
 	} | null;
 }
+interface Template {
+	template: string;
+	params: (Field | Field & Record<string, unknown>)[];
+}
+declare function template$1(strings: TemplateStringsArray, ...params: (Field | Field & Record<string, unknown>)[]): {
+	template: string;
+	params: (Field | (Field & Record<string, unknown>))[];
+};
+declare const field$1: {
+	text: (text: string, center?: boolean, color?: string) => FieldText;
+	dropdownDynamic: (menuName: string, bgColor: string, arrowColor?: string, fontSize?: number) => FieldDropdownDynamic;
+};
+type LiteralUnion<BlockName extends string> = BlockName | (string & Record<never, never>);
+interface AddBlock<BlockName extends string> {
+	/**
+	 * Entry.block에 새로운 블록을 등록합니다.
+	 * @param blockName 블록의 내부 이름입니다.
+	 * @param template 블록의 텍스트 템플릿입니다.
+	 * @param colors 블록의 색깔 정보입니다.
+	 * @param colors.color 블록의 색깔입니다.
+	 * @param colors.outerline 블록의 테두리 색깔입니다.
+	 * @param param 블록의 매개변수 정보입니다.
+	 * @param param.params 블록의 매개변수 배열입니다.
+	 * @param param.def 블록의 매개변수 기본값입니다.
+	 * @param param.map 블록의 매개변수가 각각 몇 번째 인덱스에 대응하는지 나타내는 객체입니다.
+	 * @param _class 블록을 구분할 그룹 이름입니다.
+	 * @param func 블록이 실행될 때 호출되는 함수입니다.
+	 * @param skeleton 블록의 모양입니다.
+	 */
+	<ParamsKey extends string>(blockName: LiteralUnion<BlockName>, template: string | Template, colors: {
+		color: string;
+		outerline?: string;
+	}, param: {
+		params?: (Field & Record<string, unknown>)[];
+		def?: object[];
+		map?: Record<ParamsKey, number>;
+	}, _class?: string, func?: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown, skeleton?: Skeleton): void;
+}
+declare global {
+	var updateCategory: UpdateCategory;
+	var template: TemplateFunc;
+	var field: FieldFunc;
+}
+type FieldFunc = typeof field$1;
+type TemplateFunc = typeof template$1;
 type UpdateCategory = 
 /**
  * 엔트리 로딩 완료 시, 카테고리를 새로 추가하고 적용합니다.
@@ -414,34 +463,6 @@ type UpdateCategory =
 	colorOn?: string;
 	colorOnText?: string;
 }) => void;
-declare global {
-	var updateCategory: UpdateCategory;
-}
-type LiteralUnion<BlockName extends string> = BlockName | (string & Record<never, never>);
-type AddBlock<BlockName extends string> = 
-/**
- * Entry.block에 새로운 블록을 등록합니다.
- * @param blockName 블록의 내부 이름입니다.
- * @param template 블록의 텍스트 템플릿입니다.
- * @param colors 블록의 색깔 정보입니다.
- * @param colors.color 블록의 색깔입니다.
- * @param colors.outerline 블록의 테두리 색깔입니다.
- * @param param 블록의 매개변수 정보입니다.
- * @param param.params 블록의 매개변수 배열입니다.
- * @param param.def 블록의 매개변수 기본값입니다.
- * @param param.map 블록의 매개변수가 각각 몇 번째 인덱스에 대응하는지 나타내는 객체입니다.
- * @param _class 블록을 구분할 그룹 이름입니다.
- * @param func 블록이 실행될 때 호출되는 함수입니다.
- * @param skeleton 블록의 모양입니다.
- */
-<ParamsKey extends string>(blockName: LiteralUnion<BlockName>, template: string, colors: {
-	color: string;
-	outerline?: string;
-}, param: {
-	params?: (Field & Record<string, unknown>)[];
-	def?: object[];
-	map?: Record<ParamsKey, number>;
-}, _class?: string, func?: (sprite: EntityObject, script: Scope<ParamsKey>) => unknown, skeleton?: Skeleton) => void;
 
 declare namespace EntryStatic$ {
 	export { CategoryData$1 as CategoryData, ColorSet, colorSet, getAllBlocks };

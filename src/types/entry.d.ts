@@ -69,6 +69,10 @@ export interface FieldBlock extends FieldBase {
 export interface FieldDropdownDynamic extends FieldBase {
   type: 'DropdownDynamic'
   menuName: string
+  value?: unknown
+  fontSize?: number
+  bgColor?: string
+  arrowColor?: string
 }
 
 export type Field =

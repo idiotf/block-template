@@ -9,31 +9,14 @@ const o2 = '#1f8bfd';
 
 updateCategory('block_template', ['aqu3180_title', 'if_scene_is'], addBlock => {
 
-addBlock('aqu3180_title', '%1', {
+addBlock('aqu3180_title', template`${field.text('aqu3180', true)}`, {
   color: EntryStatic.colorSet.common.TRANSPARENT,
-}, {
-  params: [{
-    type: 'Text',
-    text: 'aqu3180',
-    align: 'center',
-    color: EntryStatic.colorSet.common.TEXT,
-  }],
-}, 'text', () => {}, 'basic_text')
+}, {}, 'text', () => {}, 'basic_text')
 
-addBlock('if_scene_is', '만약 현재 장면이 %1 이라면', {
+addBlock('if_scene_is', template`만약 현재 장면이 ${field.dropdownDynamic('scenes', o2)} 이라면`, {
   color: c2,
   outerline: o2,
 }, {
-  params: [
-    {
-      type: 'DropdownDynamic',
-      value: null,
-      menuName: 'scenes',
-      fontSize: 11,
-      bgColor: o2,
-      arrowColor: EntryStatic.colorSet.common.WHITE,
-    },
-  ],
   def: [],
   map: {
     ID: 0,
